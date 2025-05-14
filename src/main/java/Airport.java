@@ -87,7 +87,7 @@ public class Airport {
                     Elements elements = document.select(".hidden-link");
                     for (Element element : elements) {
                         String strElement = element.toString();
-//                        System.out.println("\uD83C\uDCCF" + strElement + "\uD83C\uDCCF");
+                        //System.out.println("\uD83C\uDCCF" + strElement + "\uD83C\uDCCF");
 
                         String templateForNameAirline = "class=\"fade-string\">";
                         int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
@@ -115,9 +115,20 @@ public class Airport {
                         startIndexForPlaceForArrival += templateForPlaceForArrival.length();
                         int endIndexForPlaceForArrival = strElement.indexOf("</td>", startIndexForPlaceForArrival);
                         String placeForArrival = strElement.substring(startIndexForPlaceForArrival, endIndexForPlaceForArrival);
+
+                        String templateForTimeDeparture = placeForArrival + "</td>\n <td>";
+                        int startIndexForTimeDeparture = strElement.indexOf(templateForTimeDeparture);
+                        if (startIndexForTimeDeparture == -1) {
+                            continue;
+                        }
+                        startIndexForTimeDeparture += templateForTimeDeparture.length();
+                        int endIndexForTimeDeparture = strElement.indexOf("</td>", startIndexForTimeDeparture);
+                        String timeDeparture = strElement.substring(startIndexForTimeDeparture, endIndexForTimeDeparture);
+
                         System.out.println("\uD83C\uDCCF" + nameAirline + "\n" +
                                 numberFlight.replaceAll("\\(|\\)", "") + "\n" +
-                                placeForArrival + "\uD83C\uDCCF");
+                                placeForArrival + "\n" +
+                                timeDeparture + "\uD83C\uDCCF");
                     }
                 } catch (Exception ex) {
                     ex.getMessage();
