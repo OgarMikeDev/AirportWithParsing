@@ -22,7 +22,7 @@ public class Main {
                 "Уфа\n" +
                 "А мы выведем список всех вылетов из него:");
         String nameAirport = new Scanner(System.in).nextLine();
-        airport.printListDepartureFlightsFromSelectedUserAirport(nameAirport);
+        System.out.println(airport.printListDepartureFlightsFromSelectedUserAirport(nameAirport));
 
         //TODO вывод списка прилётов в выбранный пользователем аэропорт
 
