@@ -87,6 +87,7 @@ public class Airport {
                     Elements elements = document.select(".hidden-link");
                     for (Element element : elements) {
                         String strElement = element.toString();
+//                        System.out.println("\uD83C\uDCCF" + strElement + "\uD83C\uDCCF");
 
                         String templateForNameAirline = "class=\"fade-string\">";
                         int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
@@ -94,11 +95,29 @@ public class Airport {
                             continue;
                         }
                         startIndexForNameAirline += templateForNameAirline.length();
-
                         int endIndexForNameAirline = strElement.indexOf("</span>", startIndexForNameAirline);
                         String nameAirline = strElement.substring(startIndexForNameAirline, endIndexForNameAirline);
 
-                        System.out.println("\uD83C\uDCCF" + nameAirline + "\uD83C\uDCCF");
+                        String templateForNumberFlight = "</span> ";
+                        int startIndexForNumberFlight = strElement.indexOf(templateForNumberFlight);
+                        if (startIndexForNumberFlight == -1) {
+                            continue;
+                        }
+                        startIndexForNumberFlight += templateForNumberFlight.length();
+                        int endIndexForNumberFlight = strElement.indexOf("</td>", startIndexForNumberFlight);
+                        String numberFlight = strElement.substring(startIndexForNumberFlight, endIndexForNumberFlight);
+
+                        String templateForPlaceForArrival = numberFlight + "</td>\n\s<td>";
+                        int startIndexForPlaceForArrival = strElement.indexOf(templateForPlaceForArrival);
+                        if (startIndexForPlaceForArrival == -1) {
+                            continue;
+                        }
+                        startIndexForPlaceForArrival += templateForPlaceForArrival.length();
+                        int endIndexForPlaceForArrival = strElement.indexOf("</td>", startIndexForPlaceForArrival);
+                        String placeForArrival = strElement.substring(startIndexForPlaceForArrival, endIndexForPlaceForArrival);
+                        System.out.println("\uD83C\uDCCF" + nameAirline + "\n" +
+                                numberFlight.replaceAll("\\(|\\)", "") + "\n" +
+                                placeForArrival + "\uD83C\uDCCF");
                     }
                 } catch (Exception ex) {
                     ex.getMessage();
