@@ -61,7 +61,7 @@ public class Airport {
 
     public void printMapAirports() {
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            System.out.println("\"" + entryForAirport.getKey() + "\n" + entryForAirport.getValue() + "\"");
+            System.out.println("\uD83C\uDCCF" + entryForAirport.getKey() + "\n" + entryForAirport.getValue() + "\uD83C\uDCCF");
         }
     }
 }
