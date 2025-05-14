@@ -8,21 +8,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Airport {
-    private String pathToHtmlCodeMainPageAirport = "src/main/resources/data/mainPageAirports.html";
+    private String pathToHtmlCodeMainPageAirport = "src/main/resources/data/";
     private Map<String, String> mapAirports;
 
     public Airport(String urlMainPageAirports) {
         mapAirports = new HashMap<>();
-        parseMainPageAirports(urlMainPageAirports);
+        saveMapAirports(urlMainPageAirports);
     }
 
-    public void parseMainPageAirports(String urlMainPageAirports) {
+    public Document parseHtmlCode(String url) {
+        Document document = null;
+        try {
+            document = Jsoup.connect(url).get();
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+        return document;
+    }
+
+    public void saveMapAirports(String urlMainPageAirports) {
         try {
             Document document = Jsoup.connect(urlMainPageAirports).get();
             Elements elements = document.select(".s__yB3EapYI1kWLVKzMbxuf");
             String strDocument = document.toString();
 
-            FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport);
+            FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport + "mainPageAirports.html");
             fileWriter.write(strDocument);
 
             for (Element element : elements) {
@@ -50,7 +60,6 @@ public class Airport {
                             continue;
                         }
                         mapAirports.put(nameAirport, linkAirport);
-
                     }
                 }
             }
@@ -59,9 +68,42 @@ public class Airport {
         }
     }
 
+    //TODO вывод всех аэропортов с ссылками на их страницами
     public void printMapAirports() {
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
             System.out.println("\uD83C\uDCCF" + entryForAirport.getKey() + "\n" + entryForAirport.getValue() + "\uD83C\uDCCF");
+        }
+    }
+
+    //TODO вывод списка вылетов из выбранного пользователем аэропорта
+    public void printListDepartureFlightsFromSelectedUserAirport(String nameAirport) {
+        for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
+            if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
+                Document document = parseHtmlCode(entryForAirport.getValue());
+                try {
+                    FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport + "/" + nameAirport + ".html");
+                    fileWriter.write(document.toString());
+
+                    Elements elements = document.select(".hidden-link");
+                    for (Element element : elements) {
+                        String strElement = element.toString();
+
+                        String templateForNameAirline = "class=\"fade-string\">";
+                        int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
+                        if (startIndexForNameAirline == -1) {
+                            continue;
+                        }
+                        startIndexForNameAirline += templateForNameAirline.length();
+
+                        int endIndexForNameAirline = strElement.indexOf("</span>", startIndexForNameAirline);
+                        String nameAirline = strElement.substring(startIndexForNameAirline, endIndexForNameAirline);
+
+                        System.out.println("\uD83C\uDCCF" + nameAirline + "\uD83C\uDCCF");
+                    }
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+            }
         }
     }
 }
