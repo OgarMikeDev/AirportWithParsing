@@ -116,7 +116,7 @@ public class Airport {
                         int endIndexForPlaceForArrival = strElement.indexOf("</td>", startIndexForPlaceForArrival);
                         String placeForArrival = strElement.substring(startIndexForPlaceForArrival, endIndexForPlaceForArrival);
 
-                        String templateForTimeDeparture = placeForArrival + "</td>\n <td>";
+                        String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
                         int startIndexForTimeDeparture = strElement.indexOf(templateForTimeDeparture);
                         if (startIndexForTimeDeparture == -1) {
                             continue;
@@ -125,10 +125,40 @@ public class Airport {
                         int endIndexForTimeDeparture = strElement.indexOf("</td>", startIndexForTimeDeparture);
                         String timeDeparture = strElement.substring(startIndexForTimeDeparture, endIndexForTimeDeparture);
 
+                        String templateForTimeFlight = timeDeparture + "</td>\n\s<td>";
+                        int startIndexForTimeFlight = strElement.indexOf(templateForTimeFlight);
+                        if (startIndexForTimeFlight == -1) {
+                            continue;
+                        }
+                        startIndexForTimeFlight += templateForTimeFlight.length();
+                        int endIndexForTimeFlight = strElement.indexOf("</td>", startIndexForTimeFlight);
+                        String timeFlight = strElement.substring(startIndexForTimeFlight, endIndexForTimeFlight);
+
+                        String templateForTimeArrival = timeFlight + "</td>\n\s<td>";
+                        int startIndexForTimeArrival = strElement.indexOf(templateForTimeArrival);
+                        if (startIndexForTimeArrival == -1) {
+                            continue;
+                        }
+                        startIndexForTimeArrival += templateForTimeArrival.length();
+                        int endIndexForTimeArrival = strElement.indexOf("</td>", startIndexForTimeArrival);
+                        String timeArrival = strElement.substring(startIndexForTimeArrival, endIndexForTimeArrival);
+
+                        String templateForDaysForDeparture = "class=\"hidden-link__replacement\">";
+                        int startIndexForDaysForDeparture = strElement.indexOf(templateForDaysForDeparture);
+                        if (startIndexForDaysForDeparture == -1) {
+                            continue;
+                        }
+                        startIndexForDaysForDeparture += templateForDaysForDeparture.length();
+                        int endIndexForDaysForDeparture = strElement.indexOf("</div>", startIndexForDaysForDeparture);
+                        String daysForDeparture = strElement.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
+
                         System.out.println("\uD83C\uDCCF" + nameAirline + "\n" +
                                 numberFlight.replaceAll("\\(|\\)", "") + "\n" +
                                 placeForArrival + "\n" +
-                                timeDeparture + "\uD83C\uDCCF");
+                                timeDeparture + "\n" +
+                                timeFlight + "\n" +
+                                timeArrival + "\n" +
+                                daysForDeparture + "\uD83C\uDCCF");
                     }
                 } catch (Exception ex) {
                     ex.getMessage();

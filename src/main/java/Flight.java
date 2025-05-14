@@ -3,4 +3,6 @@ public class Flight {
     private String numberFlight;
     private String placeForArrival;
     private String timeDeparture;
+    private String timeFlight;
+    private String daysForDeparture;
 }
