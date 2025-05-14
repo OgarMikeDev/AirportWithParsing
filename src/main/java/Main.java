@@ -20,7 +20,7 @@ public class Main {
                 "Домодедово;\n" +
                 "Кольцово;\n" +
                 "Уфа\n" +
-                "А мы выведем список всех вылетов из него:");
+                "А мы вернём список всех вылетов из него:");
         String nameAirport = new Scanner(System.in).nextLine();
         System.out.println(airport.printListDepartureFlightsFromSelectedUserAirport(nameAirport));
 
