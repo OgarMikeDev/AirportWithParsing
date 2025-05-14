@@ -59,7 +59,9 @@ public class Airport {
         }
     }
 
-    public Map<String, String> getMapAirports() {
-        return mapAirports;
+    public void printMapAirports() {
+        for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
+            System.out.println("\"" + entryForAirport.getKey() + "\n" + entryForAirport.getValue() + "\"");
+        }
     }
 }
