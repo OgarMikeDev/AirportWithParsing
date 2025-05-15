@@ -21,10 +21,24 @@ public class Main {
                 "Кольцово;\n" +
                 "Уфа\n" +
                 "А мы вернём список всех вылетов из него:");
-        String nameAirport = new Scanner(System.in).nextLine();
-        System.out.println(airport.printListDepartureFlightsFromSelectedUserAirport(nameAirport));
+        String nameAirportDeparture = new Scanner(System.in).nextLine();
+        System.out.println(airport.printListDepartureFlightsFromSelectedUserAirport(nameAirportDeparture));
 
         //TODO вывод списка прилётов в выбранный пользователем аэропорт
+        System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
+                "Иркутск;\n" +
+                "Минеральные Воды;\n" +
+                "Казань;\n" +
+                "Шереметьево;\n" +
+                "Жуковский;\n" +
+                "Пулково;\n" +
+                "Внуково;\n" +
+                "Домодедово;\n" +
+                "Кольцово;\n" +
+                "Уфа\n" +
+                "А мы вернём список всех прилётов из него:");
+        String nameAirportArrival = new Scanner(System.in).nextLine();
+        System.out.println(airport.printListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
 
         //TODO вывод ближайшего прилёта в выбранный пользователем аэропорт
 
