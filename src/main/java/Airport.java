@@ -196,7 +196,7 @@ public class Airport {
                             for (Element element : elements) {
                                 String strElement = element.toString();
 
-                                Flight.TypeFlight typeFlight = Flight.TypeFlight.DEPARTURE;
+                                Flight.TypeFlight typeFlight = Flight.TypeFlight.ARRIVAL;
 
                                 String templateForNameAirline = "class=\"fade-string\">";
                                 int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
