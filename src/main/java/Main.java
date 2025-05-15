@@ -8,7 +8,7 @@ public class Main {
         System.out.println("Вывод всех аэропортов с ссылками на их страницами:");
         airport.printMapAirports();
 
-        //TODO вывод списка вылетов из выбранного пользователем аэропорта
+        //TODO возвращение списка вылетов из выбранного пользователем аэропорта
         System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
                 "Иркутск;\n" +
                 "Минеральные Воды;\n" +
@@ -22,9 +22,9 @@ public class Main {
                 "Уфа\n" +
                 "А мы вернём список всех вылетов из него:");
         String nameAirportDeparture = new Scanner(System.in).nextLine();
-        System.out.println(airport.printListDepartureFlightsFromSelectedUserAirport(nameAirportDeparture));
+        System.out.println(airport.getListDepartureFlightsFromSelectedUserAirport(nameAirportDeparture));
 
-        //TODO вывод списка прилётов в выбранный пользователем аэропорт
+        //TODO возвращение списка прилётов в выбранный пользователем аэропорт
         System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
                 "Иркутск;\n" +
                 "Минеральные Воды;\n" +
@@ -38,9 +38,9 @@ public class Main {
                 "Уфа\n" +
                 "А мы вернём список всех прилётов из него:");
         String nameAirportArrival = new Scanner(System.in).nextLine();
-        System.out.println(airport.printListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
+        System.out.println(airport.getListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
 
-        //TODO вывод ближайшего прилёта в выбранный пользователем аэропорт
+        //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
 
         /*
         TODO вывод списка вылетов

@@ -78,7 +78,7 @@ public class Airport {
     }
 
     //TODO возвращение списка вылетов из выбранного пользователем аэропорта
-    public List<Flight> printListDepartureFlightsFromSelectedUserAirport(String nameAirport) {
+    public List<Flight> getListDepartureFlightsFromSelectedUserAirport(String nameAirport) {
         List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
             if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
@@ -179,7 +179,7 @@ public class Airport {
     }
 
     //TODO вывод списка прилётов в выбранный пользователем аэропорт
-    public List<Flight> printListArrivalFlightsFromSelectedUserAirport(String nameAirport) {
+    public List<Flight> getListArrivalFlightsFromSelectedUserAirport(String nameAirport) {
         List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
             if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
@@ -277,5 +277,13 @@ public class Airport {
             }
         }
         return listDepartureFlightSelectedAirport;
+    }
+
+    //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
+    public Flight printFirstFlightArrivalInSelectedUserAirport(String nameAirport) {
+        for (Flight flight : getListArrivalFlightsFromSelectedUserAirport(nameAirport)) {
+
+        }
+        return null;
     }
 }
