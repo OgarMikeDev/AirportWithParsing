@@ -41,6 +41,20 @@ public class Main {
         System.out.println(airport.getListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
 
         //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
+        System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
+                "Иркутск;\n" +
+                "Минеральные Воды;\n" +
+                "Казань;\n" +
+                "Шереметьево;\n" +
+                "Жуковский;\n" +
+                "Пулково;\n" +
+                "Внуково;\n" +
+                "Домодедово;\n" +
+                "Кольцово;\n" +
+                "Уфа\n" +
+                "А мы вернём ближайший прилёт на него:");
+        String nameAirportForFirstArrival = new Scanner(System.in).nextLine();
+        airport.getFirstArrivalInSelectedUserAirport(nameAirportForFirstArrival);
 
         /*
         TODO вывод списка вылетов

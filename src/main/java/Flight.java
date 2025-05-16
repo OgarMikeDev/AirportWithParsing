@@ -24,36 +24,36 @@ public class Flight {
         this.typeFlight = typeFlight;
     }
 
-    public void setTypeFlight(TypeFlight typeFlight) {
-        this.typeFlight = typeFlight;
+    public TypeFlight getTypeFlight() {
+        return typeFlight;
     }
 
-    public void setNameAirline(String nameAirline) {
-        this.nameAirline = nameAirline;
+    public String getNameAirline() {
+        return nameAirline;
     }
 
-    public void setNumberFlight(String numberFlight) {
-        this.numberFlight = numberFlight;
+    public String getNumberFlight() {
+        return numberFlight;
     }
 
-    public void setPlaceForArrival(String placeForArrival) {
-        this.placeForArrival = placeForArrival;
+    public String getPlaceForArrival() {
+        return placeForArrival;
     }
 
-    public void setTimeDeparture(String timeDeparture) {
-        this.timeDeparture = timeDeparture;
+    public String getTimeDeparture() {
+        return timeDeparture;
     }
 
-    public void setTimeFlight(String timeFlight) {
-        this.timeFlight = timeFlight;
+    public String getTimeFlight() {
+        return timeFlight;
     }
 
-    public void setTimeArrival(String timeArrival) {
-        this.timeArrival = timeArrival;
+    public String getTimeArrival() {
+        return timeArrival;
     }
 
-    public void setDaysForDeparture(String daysForDeparture) {
-        this.daysForDeparture = daysForDeparture;
+    public String getDaysForDeparture() {
+        return daysForDeparture;
     }
 
     @Override

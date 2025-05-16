@@ -4,6 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -280,10 +281,16 @@ public class Airport {
     }
 
     //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
-    public Flight printFirstFlightArrivalInSelectedUserAirport(String nameAirport) {
-        for (Flight flight : getListArrivalFlightsFromSelectedUserAirport(nameAirport)) {
-
-        }
+    public Flight getFirstArrivalInSelectedUserAirport(String nameAirport) {
+//        for (Flight flight : getListDepartureFlightsFromSelectedUserAirport(nameAirport)) {
+//            String[] arrayHoursAndMinutes = flight.getTimeArrival().split(":");
+//            int hour = Integer.parseInt(arrayHoursAndMinutes[0]);
+//            int minute = Integer.parseInt(arrayHoursAndMinutes[1]);
+//            LocalDateTime localDateTime =
+//            System.out.println("Время спарсенное: " + );
+////            if (flight.getPlaceForArrival().compareToIgnoreCase(nameAirport) == 0 &&
+////                flight.getTimeDeparture())
+//        }
         return null;
     }
 }
