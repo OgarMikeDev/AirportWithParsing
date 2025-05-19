@@ -20,11 +20,17 @@ public class Main {
         String nameAirportArrival = new Scanner(System.in).nextLine();
         System.out.println(airport.getListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
 
-        //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
-        System.out.println("\nВведите название аэропорта:\n" +
+        /*
+        TODO возвращение ближайшего прилёта
+         в выбранный пользователем аэропорт
+         из точки A в точку B
+         */
+        System.out.println("\nВведите название аэропорта, из кот-го планируете вылететь:\n");
+        String nameAirportForDeparture = new Scanner(System.in).nextLine();
+        System.out.println("\nВведите название аэропорта, в кот-й планируете прилететь:\n" +
                 "А мы вернём ближайший прилёт на него:");
-        String nameAirportForFirstArrival = new Scanner(System.in).nextLine();
-        airport.getFirstArrivalInSelectedUserAirport(nameAirportForFirstArrival);
+        String nameAirportForArrival = new Scanner(System.in).nextLine();
+        airport.getFirstArrivalInSelectedUserAirport(nameAirportForDeparture, nameAirportForArrival);
 
         /*
         TODO вывод списка вылетов
