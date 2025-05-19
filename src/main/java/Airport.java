@@ -4,19 +4,20 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Airport {
-    private String pathToHtmlCodeMainPageAirport = "src/main/resources/data/";
+    private String pathToFileWithHtmlCode = "src/main/resources/data/";
+    private String urlAllAirports = "";
     private Map<String, String> mapAirports;
 
     public Airport(String urlMainPageAirports) {
         mapAirports = new HashMap<>();
         saveMapAirports(urlMainPageAirports);
+        saveMapAllAirports();
     }
 
     public Document parseHtmlCode(String url) {
@@ -35,7 +36,7 @@ public class Airport {
             Elements elements = document.select(".s__yB3EapYI1kWLVKzMbxuf");
             String strDocument = document.toString();
 
-            FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport + "mainPageAirports.html");
+            FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "mainPageAirports.html");
             fileWriter.write(strDocument);
 
             for (Element element : elements) {
@@ -60,11 +61,27 @@ public class Airport {
                         String nameAirport = line.substring(startIndexForNameAirport);
 
                         if (nameAirport.equals("Аэропорты")) {
+                            urlAllAirports = linkAirport;
                             continue;
                         }
                         mapAirports.put(nameAirport, linkAirport);
                     }
                 }
+            }
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+    }
+
+    //TODO сохранение всех аэропортов
+    public void saveMapAllAirports() {
+        try {
+            Document document = parseHtmlCode(urlAllAirports);
+            FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "all_airports.html");
+            fileWriter.write(document.toString());
+            Elements elements = document.select(".index-list__item.is-active");
+            for (Element element : elements) {
+                System.out.println("\uD83C\uDCCF" + element + "\uD83C\uDCCF");
             }
         } catch (Exception ex) {
             ex.getMessage();
@@ -85,7 +102,7 @@ public class Airport {
             if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
                 Document document = parseHtmlCode(entryForAirport.getValue());
                 try {
-                    FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport + "/" + nameAirport + ".html");
+                    FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");
                     fileWriter.write(document.toString());
 
                     Elements elementsDirection = document.select(".page__part");
@@ -186,7 +203,7 @@ public class Airport {
             if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
                 Document document = parseHtmlCode(entryForAirport.getValue());
                 try {
-                    FileWriter fileWriter = new FileWriter(pathToHtmlCodeMainPageAirport + "/" + nameAirport + ".html");
+                    FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");
                     fileWriter.write(document.toString());
 
                     Elements elementsDirection = document.select(".page__part");
@@ -282,15 +299,9 @@ public class Airport {
 
     //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
     public Flight getFirstArrivalInSelectedUserAirport(String nameAirport) {
-//        for (Flight flight : getListDepartureFlightsFromSelectedUserAirport(nameAirport)) {
-//            String[] arrayHoursAndMinutes = flight.getTimeArrival().split(":");
-//            int hour = Integer.parseInt(arrayHoursAndMinutes[0]);
-//            int minute = Integer.parseInt(arrayHoursAndMinutes[1]);
-//            LocalDateTime localDateTime =
-//            System.out.println("Время спарсенное: " + );
-////            if (flight.getPlaceForArrival().compareToIgnoreCase(nameAirport) == 0 &&
-////                flight.getTimeDeparture())
-//        }
+        for (Flight flightArrival : getListArrivalFlightsFromSelectedUserAirport(nameAirport)) {
+
+        }
         return null;
     }
 }
