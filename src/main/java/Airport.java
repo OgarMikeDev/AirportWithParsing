@@ -79,6 +79,7 @@ public class Airport {
             Elements elements = document.select(".index-list__item.is-active");
             for (Element element : elements) {
                 String strElement = element.toString();
+
                 String templateForNameAirport = "data-original-name=\"";
                 int startIndexForNameAirport = strElement.indexOf(templateForNameAirport);
                 if (startIndexForNameAirport == -1) {
@@ -87,6 +88,15 @@ public class Airport {
                 startIndexForNameAirport += templateForNameAirport.length();
                 int endIndexForNameAirport = strElement.indexOf("\"", startIndexForNameAirport);
                 String nameAirport = strElement.substring(startIndexForNameAirport, endIndexForNameAirport);
+
+                String templateForAirportCity = "</a> ";
+                int startIndexForAirportCity = strElement.indexOf(templateForAirportCity);
+                if (startIndexForAirportCity == -1) {
+                    continue;
+                }
+                startIndexForAirportCity += templateForAirportCity.length();
+                int endIndexForAirportCity = strElement.indexOf("</li>", startIndexForAirportCity);
+                String airportCity = strElement.substring(startIndexForAirportCity, endIndexForAirportCity);
 
                 String templateForLinkAirport = "href=\"";
                 int startIndexForLinkAirport = strElement.indexOf(templateForLinkAirport);
@@ -97,7 +107,7 @@ public class Airport {
                 int endIndexForLinkAirport = strElement.indexOf("\"", startIndexForLinkAirport);
                 String linkAirport = urlMainPageAirports + strElement.substring(startIndexForLinkAirport, endIndexForLinkAirport);
 
-                mapAirports.put(nameAirport, linkAirport);
+                mapAirports.put(nameAirport + " - " + airportCity, linkAirport);
             }
         } catch (Exception ex) {
             ex.getMessage();
