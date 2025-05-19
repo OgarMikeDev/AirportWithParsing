@@ -124,7 +124,7 @@ public class Airport {
     public List<Flight> getListDepartureFlightsFromSelectedUserAirport(String nameAirport) {
         List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
+            if (entryForAirport.getKey().contains(nameAirport)) {
                 Document document = parseHtmlCode(entryForAirport.getValue());
                 try {
                     FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");
@@ -225,7 +225,7 @@ public class Airport {
     public List<Flight> getListArrivalFlightsFromSelectedUserAirport(String nameAirport) {
         List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            if (entryForAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
+            if (entryForAirport.getKey().contains(nameAirport)) {
                 Document document = parseHtmlCode(entryForAirport.getValue());
                 try {
                     FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");

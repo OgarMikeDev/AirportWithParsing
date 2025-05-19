@@ -9,49 +9,19 @@ public class Main {
         airport.printMapAirports();
 
         //TODO возвращение списка вылетов из выбранного пользователем аэропорта
-        System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
-                "Иркутск;\n" +
-                "Минеральные Воды;\n" +
-                "Казань;\n" +
-                "Шереметьево;\n" +
-                "Жуковский;\n" +
-                "Пулково;\n" +
-                "Внуково;\n" +
-                "Домодедово;\n" +
-                "Кольцово;\n" +
-                "Уфа\n" +
+        System.out.println("\nВведите название аэропорта:\n" +
                 "А мы вернём список всех вылетов из него:");
         String nameAirportDeparture = new Scanner(System.in).nextLine();
         System.out.println(airport.getListDepartureFlightsFromSelectedUserAirport(nameAirportDeparture));
 
         //TODO возвращение списка прилётов в выбранный пользователем аэропорт
-        System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
-                "Иркутск;\n" +
-                "Минеральные Воды;\n" +
-                "Казань;\n" +
-                "Шереметьево;\n" +
-                "Жуковский;\n" +
-                "Пулково;\n" +
-                "Внуково;\n" +
-                "Домодедово;\n" +
-                "Кольцово;\n" +
-                "Уфа\n" +
+        System.out.println("\nВведите название аэропорта:\n" +
                 "А мы вернём список всех прилётов из него:");
         String nameAirportArrival = new Scanner(System.in).nextLine();
         System.out.println(airport.getListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
 
         //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт
-        System.out.println("\nВведите название аэропорта из списка предложенных:\n" +
-                "Иркутск;\n" +
-                "Минеральные Воды;\n" +
-                "Казань;\n" +
-                "Шереметьево;\n" +
-                "Жуковский;\n" +
-                "Пулково;\n" +
-                "Внуково;\n" +
-                "Домодедово;\n" +
-                "Кольцово;\n" +
-                "Уфа\n" +
+        System.out.println("\nВведите название аэропорта:\n" +
                 "А мы вернём ближайший прилёт на него:");
         String nameAirportForFirstArrival = new Scanner(System.in).nextLine();
         airport.getFirstArrivalInSelectedUserAirport(nameAirportForFirstArrival);
