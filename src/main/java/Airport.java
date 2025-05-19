@@ -4,10 +4,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Airport {
     private String pathToFileWithHtmlCode = "src/main/resources/data/";
@@ -15,9 +12,9 @@ public class Airport {
     private Map<String, String> mapAirports;
 
     public Airport(String urlMainPageAirports) {
-        mapAirports = new HashMap<>();
+        mapAirports = new TreeMap<>();
         saveMapAirports(urlMainPageAirports);
-        saveMapAllAirports();
+        saveMapAllAirports(urlMainPageAirports);
     }
 
     public Document parseHtmlCode(String url) {
@@ -74,14 +71,33 @@ public class Airport {
     }
 
     //TODO сохранение всех аэропортов
-    public void saveMapAllAirports() {
+    public void saveMapAllAirports(String urlMainPageAirports) {
         try {
             Document document = parseHtmlCode(urlAllAirports);
             FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "all_airports.html");
             fileWriter.write(document.toString());
             Elements elements = document.select(".index-list__item.is-active");
             for (Element element : elements) {
-                System.out.println("\uD83C\uDCCF" + element + "\uD83C\uDCCF");
+                String strElement = element.toString();
+                String templateForNameAirport = "data-original-name=\"";
+                int startIndexForNameAirport = strElement.indexOf(templateForNameAirport);
+                if (startIndexForNameAirport == -1) {
+                    continue;
+                }
+                startIndexForNameAirport += templateForNameAirport.length();
+                int endIndexForNameAirport = strElement.indexOf("\"", startIndexForNameAirport);
+                String nameAirport = strElement.substring(startIndexForNameAirport, endIndexForNameAirport);
+
+                String templateForLinkAirport = "href=\"";
+                int startIndexForLinkAirport = strElement.indexOf(templateForLinkAirport);
+                if (startIndexForLinkAirport == -1) {
+                    continue;
+                }
+                startIndexForLinkAirport += templateForLinkAirport.length();
+                int endIndexForLinkAirport = strElement.indexOf("\"", startIndexForLinkAirport);
+                String linkAirport = urlMainPageAirports + strElement.substring(startIndexForLinkAirport, endIndexForLinkAirport);
+
+                mapAirports.put(nameAirport, linkAirport);
             }
         } catch (Exception ex) {
             ex.getMessage();
