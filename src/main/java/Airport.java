@@ -13,7 +13,7 @@ public class Airport {
 
     public Airport(String urlMainPageAirports) {
         mapAirports = new TreeMap<>();
-        saveMapAirports(urlMainPageAirports);
+//        saveMapAirports(urlMainPageAirports);
         saveMapAllAirports(urlMainPageAirports);
     }
 
@@ -27,53 +27,52 @@ public class Airport {
         return document;
     }
 
-    public void saveMapAirports(String urlMainPageAirports) {
-        try {
-            Document document = Jsoup.connect(urlMainPageAirports).get();
-            Elements elements = document.select(".s__yB3EapYI1kWLVKzMbxuf");
-            String strDocument = document.toString();
-
-            FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "mainPageAirports.html");
-            fileWriter.write(strDocument);
-
-            for (Element element : elements) {
-                String strElement = element.toString();
-                for (String line : strElement.split("</a>")) {
-                    if (strElement.contains("href=\"/airports\"")) {
-                        String templateForLinkAirport = "href=\"";
-                        int startIndexForLinkAirport = line.indexOf(templateForLinkAirport);
-                        if (startIndexForLinkAirport == -1) {
-                            continue;
-                        }
-                        startIndexForLinkAirport += templateForLinkAirport.length();
-                        int endIndexForLinkAirport = line.indexOf("\"", startIndexForLinkAirport);
-                        String linkAirport = urlMainPageAirports + line.substring(startIndexForLinkAirport, endIndexForLinkAirport);
-
-                        String templateForNameAirport = "data-test-id=\"text\">";
-                        int startIndexForNameAirport = line.indexOf(templateForNameAirport);
-                        if (startIndexForNameAirport == -1) {
-                            continue;
-                        }
-                        startIndexForNameAirport += templateForNameAirport.length();
-                        String nameAirport = line.substring(startIndexForNameAirport);
-
-                        if (nameAirport.equals("Аэропорты")) {
-                            urlAllAirports = linkAirport;
-                            continue;
-                        }
-                        mapAirports.put(nameAirport, linkAirport);
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            ex.getMessage();
-        }
-    }
+//    public void saveMapAirports(String urlMainPageAirports) {
+//        try {
+//            Document document = Jsoup.connect(urlMainPageAirports).get();
+//            Elements elements = document.select(".s__yB3EapYI1kWLVKzMbxuf");
+//            String strDocument = document.toString();
+//
+//            FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "mainPageAirports.html");
+//            fileWriter.write(strDocument);
+//
+//            for (Element element : elements) {
+//                String strElement = element.toString();
+//                for (String line : strElement.split("</a>")) {
+//                    if (strElement.contains("href=\"/airports\"")) {
+//                        String templateForLinkAirport = "href=\"";
+//                        int startIndexForLinkAirport = line.indexOf(templateForLinkAirport);
+//                        if (startIndexForLinkAirport == -1) {
+//                            continue;
+//                        }
+//                        startIndexForLinkAirport += templateForLinkAirport.length();
+//                        int endIndexForLinkAirport = line.indexOf("\"", startIndexForLinkAirport);
+//                        String linkAirport = urlMainPageAirports + line.substring(startIndexForLinkAirport, endIndexForLinkAirport);
+//
+//                        String templateForNameAirport = "data-test-id=\"text\">";
+//                        int startIndexForNameAirport = line.indexOf(templateForNameAirport);
+//                        if (startIndexForNameAirport == -1) {
+//                            continue;
+//                        }
+//                        startIndexForNameAirport += templateForNameAirport.length();
+//                        String nameAirport = line.substring(startIndexForNameAirport);
+//
+//                        if (nameAirport.equals("Аэропорты")) {
+//                            urlAllAirports = linkAirport;
+//                            continue;
+//                        }
+//                    }
+//                }
+//            }
+//        } catch (Exception ex) {
+//            ex.getMessage();
+//        }
+//    }
 
     //TODO сохранение всех аэропортов
     public void saveMapAllAirports(String urlMainPageAirports) {
         try {
-            Document document = parseHtmlCode(urlAllAirports);
+            Document document = parseHtmlCode(urlMainPageAirports + "/airports");
             FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "all_airports.html");
             fileWriter.write(document.toString());
             Elements elements = document.select(".index-list__item.is-active");
