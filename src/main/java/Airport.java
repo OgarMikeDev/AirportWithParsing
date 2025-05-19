@@ -91,12 +91,12 @@ public class Airport {
 
                 String templateForAirportCity = "</a> ";
                 int startIndexForAirportCity = strElement.indexOf(templateForAirportCity);
-                if (startIndexForAirportCity == -1) {
-                    continue;
+                String airportCity = "";
+                if (startIndexForAirportCity != -1) {
+                    startIndexForAirportCity += templateForAirportCity.length();
+                    int endIndexForAirportCity = strElement.indexOf("</li>", startIndexForAirportCity);
+                    airportCity = strElement.substring(startIndexForAirportCity, endIndexForAirportCity);
                 }
-                startIndexForAirportCity += templateForAirportCity.length();
-                int endIndexForAirportCity = strElement.indexOf("</li>", startIndexForAirportCity);
-                String airportCity = strElement.substring(startIndexForAirportCity, endIndexForAirportCity);
 
                 String templateForLinkAirport = "href=\"";
                 int startIndexForLinkAirport = strElement.indexOf(templateForLinkAirport);
