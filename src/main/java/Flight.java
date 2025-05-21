@@ -1,27 +1,28 @@
+import java.time.LocalDateTime;
+
 public class Flight {
     private TypeFlight typeFlight;
     private String nameAirline;
     private String numberFlight;
     private String placeForArrival;
-    private String timeDeparture;
-    private String timeFlight;
-    private String timeArrival;
+    private LocalDateTime timeDeparture;
+    private String durationFlight;
+    private LocalDateTime timeArrival;
     private String daysForDeparture;
 
     public Flight(
             TypeFlight typeFlight, String nameAirline,
             String numberFlight, String placeForArrival,
-            String timeDeparture, String timeFlight,
-            String timeArrival, String daysForDeparture
-    ) {
+            LocalDateTime timeDeparture, String durationFlight,
+            LocalDateTime timeArrival, String daysForDeparture) {
+        this.typeFlight = typeFlight;
         this.nameAirline = nameAirline;
         this.numberFlight = numberFlight;
         this.placeForArrival = placeForArrival;
         this.timeDeparture = timeDeparture;
-        this.timeFlight = timeFlight;
-        this.daysForDeparture = daysForDeparture;
+        this.durationFlight = durationFlight;
         this.timeArrival = timeArrival;
-        this.typeFlight = typeFlight;
+        this.daysForDeparture = daysForDeparture;
     }
 
     public TypeFlight getTypeFlight() {
@@ -40,15 +41,15 @@ public class Flight {
         return placeForArrival;
     }
 
-    public String getTimeDeparture() {
+    public LocalDateTime getTimeDeparture() {
         return timeDeparture;
     }
 
-    public String getTimeFlight() {
-        return timeFlight;
+    public String getDurationFlight() {
+        return durationFlight;
     }
 
-    public String getTimeArrival() {
+    public LocalDateTime getTimeArrival() {
         return timeArrival;
     }
 
@@ -58,19 +59,19 @@ public class Flight {
 
     @Override
     public String toString() {
-        return "\uD83C\uDCCF\nFlight{" +
+        return "Flight{" +
                 "typeFlight=" + typeFlight +
                 ", nameAirline='" + nameAirline + '\'' +
                 ", numberFlight='" + numberFlight + '\'' +
                 ", placeForArrival='" + placeForArrival + '\'' +
-                ", timeDeparture='" + timeDeparture + '\'' +
-                ", timeFlight='" + timeFlight + '\'' +
-                ", timeArrival='" + timeArrival + '\'' +
+                ", timeDeparture=" + timeDeparture +
+                ", durationFlight='" + durationFlight + '\'' +
+                ", timeArrival=" + timeArrival +
                 ", daysForDeparture='" + daysForDeparture + '\'' +
-                '}' + "\n\uD83C\uDCCF";
+                '}';
     }
 
-    enum TypeFlight {
+    public enum TypeFlight {
         DEPARTURE,
         ARRIVAL
     }
