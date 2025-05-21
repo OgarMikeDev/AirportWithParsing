@@ -2,40 +2,22 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String urlMainPageAirports = "https://www.aviasales.ru";
-        Airport airport = new Airport(urlMainPageAirports);
-        //TODO вывод всех аэропортов с ссылками на их страницами
-        System.out.println("Вывод всех аэропортов с ссылками на их страницами:");
-        airport.printMapAirports();
+        Airport airport = new Airport();
 
-        //TODO возвращение списка вылетов из выбранного пользователем аэропорта
-        System.out.println("\nВведите название аэропорта:\n" +
-                "А мы вернём список всех вылетов из него:");
-        String nameAirportDeparture = new Scanner(System.in).nextLine();
-        System.out.println(airport.getListDepartureFlightsFromSelectedUserAirport(nameAirportDeparture));
-
-        //TODO возвращение списка прилётов в выбранный пользователем аэропорт
-        System.out.println("\nВведите название аэропорта:\n" +
-                "А мы вернём список всех прилётов из него:");
-        String nameAirportArrival = new Scanner(System.in).nextLine();
-        System.out.println(airport.getListArrivalFlightsFromSelectedUserAirport(nameAirportArrival));
+        //TODO Вывод всех аэропортов в удобочитаемом формате
+        //airport.printMapAllAirports();
 
         /*
-        TODO возвращение ближайшего прилёта
-         в выбранный пользователем аэропорт
-         из точки A в точку B
+        TODO
+         Ввод названия аэропорта
+         и получение списка
+         всех вылетов из него
          */
-        System.out.println("\nВведите название аэропорта, из кот-го планируете вылететь:\n");
-        String nameAirportForDeparture = new Scanner(System.in).nextLine();
-        System.out.println("\nВведите название аэропорта, в кот-й планируете прилететь:\n" +
-                "А мы вернём ближайший прилёт на него:");
-        String nameAirportForArrival = new Scanner(System.in).nextLine();
-        airport.getFirstArrivalInSelectedUserAirport(nameAirportForDeparture, nameAirportForArrival);
-
-        /*
-        TODO вывод списка вылетов
-         в выбранный пользователем аэропорт
-         и в указанное кол-во часов
-         */
+        System.out.println(
+                "\nВведите название аэропорта,\n" +
+                "чтобы получить список\n" +
+                "всех вылетов из него:");
+        String nameAirport = new Scanner(System.in).nextLine();
+        airport.getListAllDepartureFlightsFromSelectedUserAirport(nameAirport);
     }
 }
