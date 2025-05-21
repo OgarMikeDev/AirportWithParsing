@@ -4,168 +4,124 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Airport {
-    private String pathToFileWithHtmlCode = "src/main/resources/data/";
-    private Map<String, String> mapAirports;
+    private final String urlMainPageAviaSales = "https://www.aviasales.ru";
+    private Map<String, String> mapAllAirports;
+    private final String pathToFilesHtml = "src/main/resources/data/";
 
-    public Airport(String urlMainPageAirports) {
-        mapAirports = new TreeMap<>();
-        saveMapAllAirports(urlMainPageAirports);
+    public Airport() {
+        mapAllAirports = new TreeMap<>();
+        fillMapAllAirports();
     }
 
-    public Document parseHtmlCode(String url) {
+    public Document returnHtml(String urlPage) {
         Document document = null;
+
         try {
-            document = Jsoup.connect(url).get();
+            document = Jsoup.connect(urlPage).get();
         } catch (Exception ex) {
             ex.getMessage();
         }
+
         return document;
     }
 
-    //TODO сохранение всех аэропортов
-    public void saveMapAllAirports(String urlMainPageAirports) {
+    //TODO Наполнение map всех аэропортов
+    public void fillMapAllAirports() {
         try {
-            Document document = parseHtmlCode(urlMainPageAirports + "/airports");
-            FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "all_airports.html");
-            fileWriter.write(document.toString());
-            Elements elements = document.select(".index-list__item.is-active");
-            for (Element element : elements) {
-                String strElement = element.toString();
+            Document documentMainPageAviaSales = returnHtml(urlMainPageAviaSales);
+            String templateForLinkAllAirports = "href=\"/airports\"";
+            int startIndexForLinkAllAirports = documentMainPageAviaSales.toString()
+                    .indexOf(templateForLinkAllAirports);
+            if (startIndexForLinkAllAirports == -1) {
+                return;
+            }
+            startIndexForLinkAllAirports += 6;
+            int endIndexForLinkAllAirports = documentMainPageAviaSales.toString()
+                    .indexOf("\"", startIndexForLinkAllAirports);
+            String linkAllAirports = urlMainPageAviaSales +
+                    documentMainPageAviaSales.toString()
+                            .substring(startIndexForLinkAllAirports, endIndexForLinkAllAirports);
+
+            Document documentAllAirports = returnHtml(linkAllAirports);
+            FileWriter fileWriter = new FileWriter(pathToFilesHtml + "Аэропорты.html");
+            fileWriter.write(documentAllAirports.toString());
+
+            Elements elementsAllAirports = documentAllAirports.select(
+                    ".index-list__item.is-active");
+            for (Element elementAirport : elementsAllAirports) {
+                String strElementAirport = elementAirport.toString();
 
                 String templateForNameAirport = "data-original-name=\"";
-                int startIndexForNameAirport = strElement.indexOf(templateForNameAirport);
+                int startIndexForNameAirport = strElementAirport.indexOf(templateForNameAirport);
                 if (startIndexForNameAirport == -1) {
                     continue;
                 }
                 startIndexForNameAirport += templateForNameAirport.length();
-                int endIndexForNameAirport = strElement.indexOf("\"", startIndexForNameAirport);
-                String nameAirport = strElement.substring(startIndexForNameAirport, endIndexForNameAirport);
+                int endIndexForNameAirport = strElementAirport.indexOf("\"", startIndexForNameAirport);
+                String nameAirport = strElementAirport.substring(startIndexForNameAirport, endIndexForNameAirport);
 
-                String templateForAirportCity = "</a> ";
-                int startIndexForAirportCity = strElement.indexOf(templateForAirportCity);
-                String airportCity = "";
-                if (startIndexForAirportCity != -1) {
-                    startIndexForAirportCity += templateForAirportCity.length();
-                    int endIndexForAirportCity = strElement.indexOf("</li>", startIndexForAirportCity);
-                    airportCity = strElement.substring(startIndexForAirportCity, endIndexForAirportCity);
-                }
-
-                String templateForLinkAirport = "href=\"";
-                int startIndexForLinkAirport = strElement.indexOf(templateForLinkAirport);
-                if (startIndexForLinkAirport == -1) {
+                String templateForLink = "href=\"/airports";
+                int startIndexForLink = strElementAirport.indexOf(templateForLink);
+                if (startIndexForLink == -1) {
                     continue;
                 }
-                startIndexForLinkAirport += templateForLinkAirport.length();
-                int endIndexForLinkAirport = strElement.indexOf("\"", startIndexForLinkAirport);
-                String linkAirport = urlMainPageAirports + strElement.substring(startIndexForLinkAirport, endIndexForLinkAirport);
+                startIndexForLink += templateForLink.length();
+                int endIndexForLink = strElementAirport.indexOf("\"", startIndexForLink);
+                String linkAirport = linkAllAirports +
+                        strElementAirport.substring(startIndexForLink, endIndexForLink);
 
-                mapAirports.put(nameAirport + " - " + airportCity, linkAirport);
+                mapAllAirports.put(nameAirport, linkAirport);
             }
         } catch (Exception ex) {
             ex.getMessage();
         }
     }
 
-    //TODO вывод всех аэропортов с ссылками на их страницами
-    public void printMapAirports() {
-        for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            System.out.println("\uD83C\uDCCF" + entryForAirport.getKey() + "\n" + entryForAirport.getValue() + "\uD83C\uDCCF");
+    //TODO Вывод всех аэропортов в удобочитаемом формате
+    public void printMapAllAirports() {
+        for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
+            System.out.println("\uD83C\uDF89" + entryAirport.getKey() + "\n" + entryAirport.getValue() + "\uD83C\uDF89");
         }
     }
 
-    //TODO возвращение списка вылетов из выбранного пользователем аэропорта
-    public List<Flight> getListDepartureFlightsFromSelectedUserAirport(String nameAirport) {
-        List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
-        for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            if (entryForAirport.getKey().contains(nameAirport)) {
-                Document document = parseHtmlCode(entryForAirport.getValue());
+    /*
+        TODO
+         Ввод названия аэропорта
+         и получение списка
+         всех вылетов из него
+    */
+    public List<Flight> getListAllDepartureFlightsFromSelectedUserAirport(String nameAirport) {
+        List<Flight> listAllDepartureFlightsFromSelectedUserAirport = new ArrayList<>();
+        for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
+            if (entryAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
+                Document documentForAirport = returnHtml(entryAirport.getValue());
                 try {
-                    FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");
-                    fileWriter.write(document.toString());
+                    FileWriter fileWriter = new FileWriter(pathToFilesHtml + nameAirport + ".html");
+                    fileWriter.write(documentForAirport.toString());
 
-                    Elements elementsDirection = document.select(".page__part");
-                    for (Element elementDirection : elementsDirection) {
-                        String strElementDirection = elementDirection.toString();
-                        if (strElementDirection.contains("<strong>Прямые рейсы из")) {
-                            Elements elements = elementDirection.select(".hidden-link");
-                            for (Element element : elements) {
-                                String strElement = element.toString();
-
-                                Flight.TypeFlight typeFlight = Flight.TypeFlight.DEPARTURE;
-
+                    Elements elementsForAirportsAndFlights = documentForAirport.select(".page__part");
+                    for (Element elementForAirportOrFlight : elementsForAirportsAndFlights) {
+                        String strElementForAirportOrFlight = elementForAirportOrFlight.toString();
+                        if (strElementForAirportOrFlight.contains("из")) {
+                            Elements elementsForFlights = elementForAirportOrFlight.select(".hidden-link");
+                            for (Element elementForFlight : elementsForFlights) {
+                                String strElementForFlight = elementForFlight.toString();
                                 String templateForNameAirline = "class=\"fade-string\">";
-                                int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
+                                int startIndexForNameAirline = strElementForFlight.indexOf(templateForNameAirline);
                                 if (startIndexForNameAirline == -1) {
                                     continue;
                                 }
                                 startIndexForNameAirline += templateForNameAirline.length();
-                                int endIndexForNameAirline = strElement.indexOf("</span>", startIndexForNameAirline);
-                                String nameAirline = strElement.substring(startIndexForNameAirline, endIndexForNameAirline);
+                                int endIndexForNameAirline = strElementForFlight.indexOf("</span>", startIndexForNameAirline);
+                                String nameAirline = strElementForFlight.substring(startIndexForNameAirline, endIndexForNameAirline);
 
-                                String templateForNumberFlight = "</span> ";
-                                int startIndexForNumberFlight = strElement.indexOf(templateForNumberFlight);
-                                if (startIndexForNumberFlight == -1) {
-                                    continue;
-                                }
-                                startIndexForNumberFlight += templateForNumberFlight.length();
-                                int endIndexForNumberFlight = strElement.indexOf("</td>", startIndexForNumberFlight);
-                                String numberFlight = strElement.substring(startIndexForNumberFlight, endIndexForNumberFlight);
-
-                                String templateForPlaceForArrival = numberFlight + "</td>\n\s<td>";
-                                int startIndexForPlaceForArrival = strElement.indexOf(templateForPlaceForArrival);
-                                if (startIndexForPlaceForArrival == -1) {
-                                    continue;
-                                }
-                                startIndexForPlaceForArrival += templateForPlaceForArrival.length();
-                                int endIndexForPlaceForArrival = strElement.indexOf("</td>", startIndexForPlaceForArrival);
-                                String placeForArrival = strElement.substring(startIndexForPlaceForArrival, endIndexForPlaceForArrival);
-
-                                String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
-                                int startIndexForTimeDeparture = strElement.indexOf(templateForTimeDeparture);
-                                if (startIndexForTimeDeparture == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeDeparture += templateForTimeDeparture.length();
-                                int endIndexForTimeDeparture = strElement.indexOf("</td>", startIndexForTimeDeparture);
-                                String timeDeparture = strElement.substring(startIndexForTimeDeparture, endIndexForTimeDeparture);
-
-                                String templateForTimeFlight = timeDeparture + "</td>\n\s<td>";
-                                int startIndexForTimeFlight = strElement.indexOf(templateForTimeFlight);
-                                if (startIndexForTimeFlight == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeFlight += templateForTimeFlight.length();
-                                int endIndexForTimeFlight = strElement.indexOf("</td>", startIndexForTimeFlight);
-                                String timeFlight = strElement.substring(startIndexForTimeFlight, endIndexForTimeFlight);
-
-                                String templateForTimeArrival = timeFlight + "</td>\n\s<td>";
-                                int startIndexForTimeArrival = strElement.indexOf(templateForTimeArrival);
-                                if (startIndexForTimeArrival == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeArrival += templateForTimeArrival.length();
-                                int endIndexForTimeArrival = strElement.indexOf("</td>", startIndexForTimeArrival);
-                                String timeArrival = strElement.substring(startIndexForTimeArrival, endIndexForTimeArrival);
-
-                                String templateForDaysForDeparture = "class=\"hidden-link__replacement\">";
-                                int startIndexForDaysForDeparture = strElement.indexOf(templateForDaysForDeparture);
-                                if (startIndexForDaysForDeparture == -1) {
-                                    continue;
-                                }
-                                startIndexForDaysForDeparture += templateForDaysForDeparture.length();
-                                int endIndexForDaysForDeparture = strElement.indexOf("</div>", startIndexForDaysForDeparture);
-                                String daysForDeparture = strElement.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
-
-                                Flight flight = new Flight(
-                                        typeFlight, nameAirline,
-                                        numberFlight, placeForArrival,
-                                        timeDeparture, timeFlight,
-                                        timeArrival, daysForDeparture);
-
-                                listDepartureFlightSelectedAirport.add(flight);
+                                System.out.println("\uD83C\uDF89" + nameAirline + "\uD83C\uDF89");
                             }
                         }
                     }
@@ -174,112 +130,6 @@ public class Airport {
                 }
             }
         }
-        return listDepartureFlightSelectedAirport;
-    }
-
-    //TODO вывод списка прилётов в выбранный пользователем аэропорт
-    public List<Flight> getListArrivalFlightsFromSelectedUserAirport(String nameAirport) {
-        List<Flight> listDepartureFlightSelectedAirport = new ArrayList<>();
-        for (Map.Entry<String, String> entryForAirport : mapAirports.entrySet()) {
-            if (entryForAirport.getKey().contains(nameAirport)) {
-                Document document = parseHtmlCode(entryForAirport.getValue());
-                try {
-                    FileWriter fileWriter = new FileWriter(pathToFileWithHtmlCode + "/" + nameAirport + ".html");
-                    fileWriter.write(document.toString());
-
-                    Elements elementsDirection = document.select(".page__part");
-                    for (Element elementDirection : elementsDirection) {
-                        String strElementDirection = elementDirection.toString();
-                        if (strElementDirection.contains("<strong>Прямые рейсы в")) {
-                            Elements elements = elementDirection.select(".hidden-link");
-                            for (Element element : elements) {
-                                String strElement = element.toString();
-
-                                Flight.TypeFlight typeFlight = Flight.TypeFlight.ARRIVAL;
-
-                                String templateForNameAirline = "class=\"fade-string\">";
-                                int startIndexForNameAirline = strElement.indexOf(templateForNameAirline);
-                                if (startIndexForNameAirline == -1) {
-                                    continue;
-                                }
-                                startIndexForNameAirline += templateForNameAirline.length();
-                                int endIndexForNameAirline = strElement.indexOf("</span>", startIndexForNameAirline);
-                                String nameAirline = strElement.substring(startIndexForNameAirline, endIndexForNameAirline);
-
-                                String templateForNumberFlight = "</span> ";
-                                int startIndexForNumberFlight = strElement.indexOf(templateForNumberFlight);
-                                if (startIndexForNumberFlight == -1) {
-                                    continue;
-                                }
-                                startIndexForNumberFlight += templateForNumberFlight.length();
-                                int endIndexForNumberFlight = strElement.indexOf("</td>", startIndexForNumberFlight);
-                                String numberFlight = strElement.substring(startIndexForNumberFlight, endIndexForNumberFlight);
-
-                                String templateForPlaceForArrival = numberFlight + "</td>\n\s<td>";
-                                int startIndexForPlaceForArrival = strElement.indexOf(templateForPlaceForArrival);
-                                if (startIndexForPlaceForArrival == -1) {
-                                    continue;
-                                }
-                                startIndexForPlaceForArrival += templateForPlaceForArrival.length();
-                                int endIndexForPlaceForArrival = strElement.indexOf("</td>", startIndexForPlaceForArrival);
-                                String placeForArrival = strElement.substring(startIndexForPlaceForArrival, endIndexForPlaceForArrival);
-
-                                String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
-                                int startIndexForTimeDeparture = strElement.indexOf(templateForTimeDeparture);
-                                if (startIndexForTimeDeparture == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeDeparture += templateForTimeDeparture.length();
-                                int endIndexForTimeDeparture = strElement.indexOf("</td>", startIndexForTimeDeparture);
-                                String timeDeparture = strElement.substring(startIndexForTimeDeparture, endIndexForTimeDeparture);
-
-                                String templateForTimeFlight = timeDeparture + "</td>\n\s<td>";
-                                int startIndexForTimeFlight = strElement.indexOf(templateForTimeFlight);
-                                if (startIndexForTimeFlight == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeFlight += templateForTimeFlight.length();
-                                int endIndexForTimeFlight = strElement.indexOf("</td>", startIndexForTimeFlight);
-                                String timeFlight = strElement.substring(startIndexForTimeFlight, endIndexForTimeFlight);
-
-                                String templateForTimeArrival = timeFlight + "</td>\n\s<td>";
-                                int startIndexForTimeArrival = strElement.indexOf(templateForTimeArrival);
-                                if (startIndexForTimeArrival == -1) {
-                                    continue;
-                                }
-                                startIndexForTimeArrival += templateForTimeArrival.length();
-                                int endIndexForTimeArrival = strElement.indexOf("</td>", startIndexForTimeArrival);
-                                String timeArrival = strElement.substring(startIndexForTimeArrival, endIndexForTimeArrival);
-
-                                String templateForDaysForDeparture = "class=\"hidden-link__replacement\">";
-                                int startIndexForDaysForDeparture = strElement.indexOf(templateForDaysForDeparture);
-                                if (startIndexForDaysForDeparture == -1) {
-                                    continue;
-                                }
-                                startIndexForDaysForDeparture += templateForDaysForDeparture.length();
-                                int endIndexForDaysForDeparture = strElement.indexOf("</div>", startIndexForDaysForDeparture);
-                                String daysForDeparture = strElement.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
-
-                                Flight flight = new Flight(
-                                        typeFlight, nameAirline,
-                                        numberFlight, placeForArrival,
-                                        timeDeparture, timeFlight,
-                                        timeArrival, daysForDeparture);
-
-                                listDepartureFlightSelectedAirport.add(flight);
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    ex.getMessage();
-                }
-            }
-        }
-        return listDepartureFlightSelectedAirport;
-    }
-
-    //TODO возвращение ближайшего прилёта в выбранный пользователем аэропорт из точки А
-    public Flight getFirstArrivalInSelectedUserAirport(String nameAirportForDeparture, String nameAirportForArrival) {
-        return null;
+        return listAllDepartureFlightsFromSelectedUserAirport;
     }
 }
