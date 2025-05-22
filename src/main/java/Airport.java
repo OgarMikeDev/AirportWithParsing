@@ -4,6 +4,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.FileWriter;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -110,18 +112,73 @@ public class Airport {
                         String strElementForAirportOrFlight = elementForAirportOrFlight.toString();
                         if (strElementForAirportOrFlight.contains("из")) {
                             Elements elementsForFlights = elementForAirportOrFlight.select(".hidden-link");
-                            for (Element elementForFlight : elementsForFlights) {
-                                String strElementForFlight = elementForFlight.toString();
+                            for (Element elementForDepartureFlight : elementsForFlights) {
+                                String strElementForDepartureFlight = elementForDepartureFlight.toString();
+
+                                Flight.TypeFlight typeFlight = Flight.TypeFlight.DEPARTURE;
+
                                 String templateForNameAirline = "class=\"fade-string\">";
-                                int startIndexForNameAirline = strElementForFlight.indexOf(templateForNameAirline);
+                                int startIndexForNameAirline = strElementForDepartureFlight.indexOf(templateForNameAirline);
                                 if (startIndexForNameAirline == -1) {
                                     continue;
                                 }
                                 startIndexForNameAirline += templateForNameAirline.length();
-                                int endIndexForNameAirline = strElementForFlight.indexOf("</span>", startIndexForNameAirline);
-                                String nameAirline = strElementForFlight.substring(startIndexForNameAirline, endIndexForNameAirline);
+                                int endIndexForNameAirline = strElementForDepartureFlight.indexOf("</span>", startIndexForNameAirline);
+                                String nameAirline = strElementForDepartureFlight.substring(startIndexForNameAirline, endIndexForNameAirline);
 
-                                System.out.println("\uD83C\uDF89" + nameAirline + "\uD83C\uDF89");
+                                String templateForNumberFlight = nameAirline + "</span>\s";
+                                int startIndexForNumberFlight = strElementForDepartureFlight.indexOf(templateForNumberFlight);
+                                if (startIndexForNumberFlight == -1) {
+                                    continue;
+                                }
+                                startIndexForNumberFlight += templateForNumberFlight.length();
+                                int endIndexForNumberFlight = strElementForDepartureFlight.indexOf("</td>", startIndexForNumberFlight);
+                                String numberFlight = strElementForDepartureFlight.substring(startIndexForNumberFlight, endIndexForNumberFlight);
+
+                                String templateForPlaceForArrival = numberFlight + "</td>\n\s<td>";
+                                int startIndexForPlaceForArrival = strElementForDepartureFlight.indexOf(templateForPlaceForArrival);
+                                if (startIndexForPlaceForArrival == -1) {
+                                    continue;
+                                }
+                                startIndexForPlaceForArrival += templateForPlaceForArrival.length();
+                                int endIndexForPlaceForArrival = strElementForDepartureFlight.indexOf("</td>", startIndexForPlaceForArrival);
+                                String placeForArrival = strElementForDepartureFlight.substring(
+                                        startIndexForPlaceForArrival, endIndexForPlaceForArrival);
+
+                                String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
+                                int startForTimeDeparture = strElementForDepartureFlight.indexOf(templateForTimeDeparture);
+                                if (startForTimeDeparture == -1) {
+                                    continue;
+                                }
+                                startForTimeDeparture += templateForTimeDeparture.length();
+                                int endForTimeDeparture = strElementForDepartureFlight.indexOf("</td>", startForTimeDeparture);
+                                String strTimeDeparture = strElementForDepartureFlight.substring(startForTimeDeparture, endForTimeDeparture);
+                                String[] arrayStrHoursAndMinutes = strTimeDeparture.split(":");
+                                int hours = Integer.parseInt(arrayStrHoursAndMinutes[0]);
+                                int minutes = Integer.parseInt(arrayStrHoursAndMinutes[1]);
+                                LocalDateTime timeDeparture = LocalDateTime.of(
+                                        LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth(),
+                                        hours, minutes
+                                );
+
+                                String templateForDurationFlight = strTimeDeparture + "</td>\n\s<td>";
+                                int startIndexForDurationFlight = strElementForDepartureFlight.indexOf(templateForDurationFlight);
+                                if (startIndexForDurationFlight == -1) {
+                                    continue;
+                                }
+                                startIndexForDurationFlight += templateForDurationFlight.length();
+                                int endIndexForDurationFlight = strElementForDepartureFlight.indexOf("</td>", startIndexForDurationFlight);
+                                String durationFlight = strElementForDepartureFlight.substring(startIndexForDurationFlight, endIndexForDurationFlight);
+
+                                System.out.println(
+                                        "\uD83C\uDF89" +
+                                        typeFlight + "\n" +
+                                        nameAirline + "\n" +
+                                        numberFlight + "\n" +
+                                        placeForArrival + "\n" +
+                                        timeDeparture + "\n" +
+                                        durationFlight +
+                                        "\uD83C\uDF89");
                             }
                         }
                     }
