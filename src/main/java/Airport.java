@@ -202,17 +202,16 @@ public class Airport {
                                 int endIndexForDaysForDeparture = strElementForDepartureFlight.indexOf("</div>", startIndexForDaysForDeparture);
                                 String daysForDeparture = strElementForDepartureFlight.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
 
+                                //TODO формирование вылета
+                                Flight departureFlight = new Flight(
+                                        typeFlight, nameAirline,
+                                        numberFlight, placeForArrival,
+                                        timeDeparture, durationFlight,
+                                        timeArrival, daysForDeparture
+                                );
+
                                 System.out.println(
-                                        "\uD83C\uDF89" +
-                                        typeFlight + "\n" +
-                                        nameAirline + "\n" +
-                                        numberFlight + "\n" +
-                                        placeForArrival + "\n" +
-                                        timeDeparture + "\n" +
-                                        durationFlight + "\n" +
-                                        timeArrival + "\n" +
-                                        daysForDeparture +
-                                        "\uD83C\uDF89");
+                                        "\uD83C\uDF89" + departureFlight + "\uD83C\uDF89");
                             }
                         }
                     }
