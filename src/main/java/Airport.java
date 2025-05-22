@@ -110,7 +110,7 @@ public class Airport {
                     Elements elementsForAirportsAndFlights = documentForAirport.select(".page__part");
                     for (Element elementForAirportOrFlight : elementsForAirportsAndFlights) {
                         String strElementForAirportOrFlight = elementForAirportOrFlight.toString();
-                        if (strElementForAirportOrFlight.contains("из")) {
+                        if (strElementForAirportOrFlight.contains("Прямые рейсы из ")) {
                             Elements elementsForFlights = elementForAirportOrFlight.select(".hidden-link");
                             for (Element elementForDepartureFlight : elementsForFlights) {
                                 String strElementForDepartureFlight = elementForDepartureFlight.toString();
@@ -201,6 +201,131 @@ public class Airport {
                                 startIndexForDaysForDeparture += templateForDaysForDeparture.length();
                                 int endIndexForDaysForDeparture = strElementForDepartureFlight.indexOf("</div>", startIndexForDaysForDeparture);
                                 String daysForDeparture = strElementForDepartureFlight.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
+
+                                //TODO формирование вылета
+                                Flight departureFlight = new Flight(
+                                        typeFlight, nameAirline,
+                                        numberFlight, placeForArrival,
+                                        timeDeparture, durationFlight,
+                                        timeArrival, daysForDeparture
+                                );
+
+                                System.out.println(
+                                        "\uD83C\uDF89" + departureFlight + "\uD83C\uDF89");
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+            }
+        }
+        return listAllDepartureFlightsFromSelectedUserAirport;
+    }
+
+    public List<Flight> getListAllArrivalFlightsFromSelectedUserAirport(String nameAirport) {
+        List<Flight> listAllDepartureFlightsFromSelectedUserAirport = new ArrayList<>();
+        for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
+            if (entryAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
+                Document documentForAirport = returnHtml(entryAirport.getValue());
+                try {
+                    FileWriter fileWriter = new FileWriter(pathToFilesHtml + nameAirport + ".html");
+                    fileWriter.write(documentForAirport.toString());
+
+                    Elements elementsForAirportsAndFlights = documentForAirport.select(".page__part");
+                    for (Element elementForAirportOrFlight : elementsForAirportsAndFlights) {
+                        String strElementForAirportOrFlight = elementForAirportOrFlight.toString();
+                        if (strElementForAirportOrFlight.contains("Прямые рейсы в ")) {
+                            Elements elementsForFlights = elementForAirportOrFlight.select(".hidden-link");
+                            for (Element elementForArrivalFlight : elementsForFlights) {
+                                String strElementForArrivalFlight = elementForArrivalFlight.toString();
+
+                                Flight.TypeFlight typeFlight = Flight.TypeFlight.ARRIVAL;
+
+                                //TODO название авиакомпании
+                                String templateForNameAirline = "class=\"fade-string\">";
+                                int startIndexForNameAirline = strElementForArrivalFlight.indexOf(templateForNameAirline);
+                                if (startIndexForNameAirline == -1) {
+                                    continue;
+                                }
+                                startIndexForNameAirline += templateForNameAirline.length();
+                                int endIndexForNameAirline = strElementForArrivalFlight.indexOf("</span>", startIndexForNameAirline);
+                                String nameAirline = strElementForArrivalFlight.substring(startIndexForNameAirline, endIndexForNameAirline);
+
+                                //TODO номер рейса
+                                String templateForNumberFlight = nameAirline + "</span>\s";
+                                int startIndexForNumberFlight = strElementForArrivalFlight.indexOf(templateForNumberFlight);
+                                if (startIndexForNumberFlight == -1) {
+                                    continue;
+                                }
+                                startIndexForNumberFlight += templateForNumberFlight.length();
+                                int endIndexForNumberFlight = strElementForArrivalFlight.indexOf("</td>", startIndexForNumberFlight);
+                                String numberFlight = strElementForArrivalFlight.substring(startIndexForNumberFlight, endIndexForNumberFlight);
+
+                                //TODO место отправки
+                                String templateForPlaceForDeparture = numberFlight + "</td>\n\s<td>";
+                                int startIndexForPlaceForDeparture = strElementForArrivalFlight.indexOf(templateForPlaceForDeparture);
+                                if (startIndexForPlaceForDeparture == -1) {
+                                    continue;
+                                }
+                                startIndexForPlaceForDeparture += templateForPlaceForDeparture.length();
+                                int endIndexForPlaceForDeparture = strElementForArrivalFlight.indexOf("</td>", startIndexForPlaceForDeparture);
+                                String placeForArrival = strElementForArrivalFlight.substring(
+                                        startIndexForPlaceForDeparture, endIndexForPlaceForDeparture);
+
+                                //TODO время отправления
+                                String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
+                                int startForTimeDeparture = strElementForArrivalFlight.indexOf(templateForTimeDeparture);
+                                if (startForTimeDeparture == -1) {
+                                    continue;
+                                }
+                                startForTimeDeparture += templateForTimeDeparture.length();
+                                int endForTimeDeparture = strElementForArrivalFlight.indexOf("</td>", startForTimeDeparture);
+                                String strTimeDeparture = strElementForArrivalFlight.substring(startForTimeDeparture, endForTimeDeparture);
+                                String[] arrayStrHoursAndMinutes = strTimeDeparture.split(":");
+                                int hours = Integer.parseInt(arrayStrHoursAndMinutes[0]);
+                                int minutes = Integer.parseInt(arrayStrHoursAndMinutes[1]);
+                                LocalDateTime timeDeparture = LocalDateTime.of(
+                                        LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth(),
+                                        hours, minutes
+                                );
+
+                                //TODO продолжительность полёта
+                                String templateForDurationFlight = strTimeDeparture + "</td>\n\s<td>";
+                                int startIndexForDurationFlight = strElementForArrivalFlight.indexOf(templateForDurationFlight);
+                                if (startIndexForDurationFlight == -1) {
+                                    continue;
+                                }
+                                startIndexForDurationFlight += templateForDurationFlight.length();
+                                int endIndexForDurationFlight = strElementForArrivalFlight.indexOf("</td>", startIndexForDurationFlight);
+                                String durationFlight = strElementForArrivalFlight.substring(startIndexForDurationFlight, endIndexForDurationFlight);
+
+                                //TODO время прибытия
+                                String templateForTimeArrival = durationFlight + "</td>\n\s<td>";
+                                int startForTimeArrival = strElementForArrivalFlight.indexOf(templateForTimeArrival);
+                                if (startForTimeArrival == -1) {
+                                    continue;
+                                }
+                                startForTimeArrival += templateForTimeArrival.length();
+                                int endForTimeArrival = strElementForArrivalFlight.indexOf("</td>", startForTimeArrival);
+                                String strTimeArrival = strElementForArrivalFlight.substring(startForTimeArrival, endForTimeArrival);
+                                String[] arrayStrHoursAndMinutesArrival = strTimeArrival.split(":");
+                                int hoursForArrival = Integer.parseInt(arrayStrHoursAndMinutesArrival[0]);
+                                int minutesForArrival = Integer.parseInt(arrayStrHoursAndMinutesArrival[1]);
+                                LocalDateTime timeArrival = LocalDateTime.of(
+                                        LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth(),
+                                        hoursForArrival, minutesForArrival
+                                );
+
+                                //TODO дни вылета
+                                String templateForDaysForDeparture = "class=\"hidden-link__replacement\">";
+                                int startIndexForDaysForDeparture = strElementForArrivalFlight.indexOf(templateForDaysForDeparture);
+                                if (startIndexForDaysForDeparture == -1) {
+                                    continue;
+                                }
+                                startIndexForDaysForDeparture += templateForDaysForDeparture.length();
+                                int endIndexForDaysForDeparture = strElementForArrivalFlight.indexOf("</div>", startIndexForDaysForDeparture);
+                                String daysForDeparture = strElementForArrivalFlight.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
 
                                 //TODO формирование вылета
                                 Flight departureFlight = new Flight(
