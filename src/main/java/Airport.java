@@ -223,6 +223,12 @@ public class Airport {
         return listAllDepartureFlightsFromSelectedUserAirport;
     }
 
+    /*
+        TODO
+         Ввод названия аэропорта
+         и получение списка
+         всех прилётов из него
+     */
     public List<Flight> getListAllArrivalFlightsFromSelectedUserAirport(String nameAirport) {
         List<Flight> listAllDepartureFlightsFromSelectedUserAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
@@ -347,4 +353,10 @@ public class Airport {
         }
         return listAllDepartureFlightsFromSelectedUserAirport;
     }
+
+    /*
+    TODO
+     возвращать ближайший прилёт в указанный пользователем аэропорт
+     */
+
 }

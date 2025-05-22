@@ -5,7 +5,7 @@ public class Main {
         Airport airport = new Airport();
 
         //TODO Вывод всех аэропортов в удобочитаемом формате
-        //airport.printMapAllAirports();
+        airport.printMapAllAirports();
 
         /*
         TODO
@@ -32,5 +32,15 @@ public class Main {
                 "всех прилётов из него:");
         String nameAirportForArrival = new Scanner(System.in).nextLine();
         airport.getListAllArrivalFlightsFromSelectedUserAirport(nameAirportForArrival);
+
+        //TODO Ввод названия аэропорта, с кот-го осуществляется вылет:
+        System.out.println("\nВведите название аэропорта, с кот-го планируете вылететь:");
+        String nameAirportForDepartureInPlace = new Scanner(System.in).nextLine();
+
+        //TODO Ввод названия аэропорта, в кот-й хотите прилететь
+        System.out.println("\nВведите название аэропорта, в кот-й хотите прилететь:");
+        String nameAirportForArrivalInPlace = new Scanner(System.in).nextLine();
+
+        //System.out.println(airport.getFirstArrivalFlight(nameAirportForDepartureInPlace, nameAirportForArrivalInPlace));
     }
 }
