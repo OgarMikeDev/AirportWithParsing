@@ -117,6 +117,7 @@ public class Airport {
 
                                 Flight.TypeFlight typeFlight = Flight.TypeFlight.DEPARTURE;
 
+                                //TODO название авиакомпании
                                 String templateForNameAirline = "class=\"fade-string\">";
                                 int startIndexForNameAirline = strElementForDepartureFlight.indexOf(templateForNameAirline);
                                 if (startIndexForNameAirline == -1) {
@@ -126,6 +127,7 @@ public class Airport {
                                 int endIndexForNameAirline = strElementForDepartureFlight.indexOf("</span>", startIndexForNameAirline);
                                 String nameAirline = strElementForDepartureFlight.substring(startIndexForNameAirline, endIndexForNameAirline);
 
+                                //TODO номер рейса
                                 String templateForNumberFlight = nameAirline + "</span>\s";
                                 int startIndexForNumberFlight = strElementForDepartureFlight.indexOf(templateForNumberFlight);
                                 if (startIndexForNumberFlight == -1) {
@@ -135,6 +137,7 @@ public class Airport {
                                 int endIndexForNumberFlight = strElementForDepartureFlight.indexOf("</td>", startIndexForNumberFlight);
                                 String numberFlight = strElementForDepartureFlight.substring(startIndexForNumberFlight, endIndexForNumberFlight);
 
+                                //TODO место прибытия
                                 String templateForPlaceForArrival = numberFlight + "</td>\n\s<td>";
                                 int startIndexForPlaceForArrival = strElementForDepartureFlight.indexOf(templateForPlaceForArrival);
                                 if (startIndexForPlaceForArrival == -1) {
@@ -145,6 +148,7 @@ public class Airport {
                                 String placeForArrival = strElementForDepartureFlight.substring(
                                         startIndexForPlaceForArrival, endIndexForPlaceForArrival);
 
+                                //TODO время отправления
                                 String templateForTimeDeparture = placeForArrival + "</td>\n\s<td>";
                                 int startForTimeDeparture = strElementForDepartureFlight.indexOf(templateForTimeDeparture);
                                 if (startForTimeDeparture == -1) {
@@ -161,6 +165,7 @@ public class Airport {
                                         hours, minutes
                                 );
 
+                                //TODO продолжительность полёта
                                 String templateForDurationFlight = strTimeDeparture + "</td>\n\s<td>";
                                 int startIndexForDurationFlight = strElementForDepartureFlight.indexOf(templateForDurationFlight);
                                 if (startIndexForDurationFlight == -1) {
@@ -170,6 +175,7 @@ public class Airport {
                                 int endIndexForDurationFlight = strElementForDepartureFlight.indexOf("</td>", startIndexForDurationFlight);
                                 String durationFlight = strElementForDepartureFlight.substring(startIndexForDurationFlight, endIndexForDurationFlight);
 
+                                //TODO время прибытия
                                 String templateForTimeArrival = durationFlight + "</td>\n\s<td>";
                                 int startForTimeArrival = strElementForDepartureFlight.indexOf(templateForTimeArrival);
                                 if (startForTimeArrival == -1) {
@@ -186,6 +192,16 @@ public class Airport {
                                         hoursForArrival, minutesForArrival
                                 );
 
+                                //TODO дни вылета
+                                String templateForDaysForDeparture = "class=\"hidden-link__replacement\">";
+                                int startIndexForDaysForDeparture = strElementForDepartureFlight.indexOf(templateForDaysForDeparture);
+                                if (startIndexForDaysForDeparture == -1) {
+                                    continue;
+                                }
+                                startIndexForDaysForDeparture += templateForDaysForDeparture.length();
+                                int endIndexForDaysForDeparture = strElementForDepartureFlight.indexOf("</div>", startIndexForDaysForDeparture);
+                                String daysForDeparture = strElementForDepartureFlight.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
+
                                 System.out.println(
                                         "\uD83C\uDF89" +
                                         typeFlight + "\n" +
@@ -194,7 +210,8 @@ public class Airport {
                                         placeForArrival + "\n" +
                                         timeDeparture + "\n" +
                                         durationFlight + "\n" +
-                                        timeArrival +
+                                        timeArrival + "\n" +
+                                        daysForDeparture +
                                         "\uD83C\uDF89");
                             }
                         }
