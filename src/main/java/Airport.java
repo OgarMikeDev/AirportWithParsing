@@ -170,6 +170,22 @@ public class Airport {
                                 int endIndexForDurationFlight = strElementForDepartureFlight.indexOf("</td>", startIndexForDurationFlight);
                                 String durationFlight = strElementForDepartureFlight.substring(startIndexForDurationFlight, endIndexForDurationFlight);
 
+                                String templateForTimeArrival = durationFlight + "</td>\n\s<td>";
+                                int startForTimeArrival = strElementForDepartureFlight.indexOf(templateForTimeArrival);
+                                if (startForTimeArrival == -1) {
+                                    continue;
+                                }
+                                startForTimeArrival += templateForTimeArrival.length();
+                                int endForTimeArrival = strElementForDepartureFlight.indexOf("</td>", startForTimeArrival);
+                                String strTimeArrival = strElementForDepartureFlight.substring(startForTimeArrival, endForTimeArrival);
+                                String[] arrayStrHoursAndMinutesArrival = strTimeArrival.split(":");
+                                int hoursForArrival = Integer.parseInt(arrayStrHoursAndMinutesArrival[0]);
+                                int minutesForArrival = Integer.parseInt(arrayStrHoursAndMinutesArrival[1]);
+                                LocalDateTime timeArrival = LocalDateTime.of(
+                                        LocalDate.now().getYear(), LocalDate.now().getMonth(), LocalDate.now().getDayOfMonth(),
+                                        hoursForArrival, minutesForArrival
+                                );
+
                                 System.out.println(
                                         "\uD83C\uDF89" +
                                         typeFlight + "\n" +
@@ -177,7 +193,8 @@ public class Airport {
                                         numberFlight + "\n" +
                                         placeForArrival + "\n" +
                                         timeDeparture + "\n" +
-                                        durationFlight +
+                                        durationFlight + "\n" +
+                                        timeArrival +
                                         "\uD83C\uDF89");
                             }
                         }
