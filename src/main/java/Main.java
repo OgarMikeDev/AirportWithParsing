@@ -18,7 +18,7 @@ public class Main {
                 "чтобы получить список\n" +
                 "всех вылетов из него:");
         String nameAirportForDeparture = new Scanner(System.in).nextLine();
-        airport.getListAllDepartureFlightsFromSelectedUserAirport(nameAirportForDeparture);
+        System.out.println(airport.getListAllDepartureFlightsFromSelectedUserAirport(nameAirportForDeparture));
 
         /*
         TODO
@@ -31,7 +31,7 @@ public class Main {
                 "чтобы получить список\n" +
                 "всех прилётов из него:");
         String nameAirportForArrival = new Scanner(System.in).nextLine();
-        airport.getListAllArrivalFlightsFromSelectedUserAirport(nameAirportForArrival);
+        System.out.println(airport.getListAllArrivalFlightsFromSelectedUserAirport(nameAirportForArrival));
 
         //TODO Ввод названия аэропорта, с кот-го осуществляется вылет:
         System.out.println("\nВведите название аэропорта, с кот-го планируете вылететь:");
@@ -41,6 +41,6 @@ public class Main {
         System.out.println("\nВведите название аэропорта, в кот-й хотите прилететь:");
         String nameAirportForArrivalInPlace = new Scanner(System.in).nextLine();
 
-        //System.out.println(airport.getFirstArrivalFlight(nameAirportForDepartureInPlace, nameAirportForArrivalInPlace));
+        System.out.println(airport.getFirstArrivalFlight(nameAirportForDepartureInPlace, nameAirportForArrivalInPlace));
     }
 }

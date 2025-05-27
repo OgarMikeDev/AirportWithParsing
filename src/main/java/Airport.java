@@ -6,10 +6,7 @@ import org.jsoup.select.Elements;
 import java.io.FileWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Airport {
     private final String urlMainPageAviaSales = "https://www.aviasales.ru";
@@ -210,8 +207,9 @@ public class Airport {
                                         timeArrival, daysForDeparture
                                 );
 
-                                System.out.println(
-                                        "\uD83C\uDF89" + departureFlight + "\uD83C\uDF89");
+//                                System.out.println(
+//                                        "\uD83C\uDF89" + departureFlight + "\uD83C\uDF89");
+                                listAllDepartureFlightsFromSelectedUserAirport.add(departureFlight);
                             }
                         }
                     }
@@ -230,7 +228,7 @@ public class Airport {
          всех прилётов из него
      */
     public List<Flight> getListAllArrivalFlightsFromSelectedUserAirport(String nameAirport) {
-        List<Flight> listAllDepartureFlightsFromSelectedUserAirport = new ArrayList<>();
+        List<Flight> listAllArrivalFlightsFromSelectedUserAirport = new ArrayList<>();
         for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
             if (entryAirport.getKey().compareToIgnoreCase(nameAirport) == 0) {
                 Document documentForAirport = returnHtml(entryAirport.getValue());
@@ -334,15 +332,16 @@ public class Airport {
                                 String daysForDeparture = strElementForArrivalFlight.substring(startIndexForDaysForDeparture, endIndexForDaysForDeparture);
 
                                 //TODO формирование вылета
-                                Flight departureFlight = new Flight(
+                                Flight arrivalFlight = new Flight(
                                         typeFlight, nameAirline,
                                         numberFlight, placeForArrival,
                                         timeDeparture, durationFlight,
                                         timeArrival, daysForDeparture
                                 );
 
-                                System.out.println(
-                                        "\uD83C\uDF89" + departureFlight + "\uD83C\uDF89");
+//                                System.out.println(
+//                                        "\uD83C\uDF89" + arrivalFlight + "\uD83C\uDF89");
+                                listAllArrivalFlightsFromSelectedUserAirport.add(arrivalFlight);
                             }
                         }
                     }
@@ -351,12 +350,30 @@ public class Airport {
                 }
             }
         }
-        return listAllDepartureFlightsFromSelectedUserAirport;
+        return listAllArrivalFlightsFromSelectedUserAirport;
     }
 
     /*
     TODO
      возвращать ближайший прилёт в указанный пользователем аэропорт
      */
+    public Flight getFirstArrivalFlight(String nameAirportForDepartureInPlace, String nameAirportForArrivalInPlace) {
+        Set<Flight> setDepartureFlights = new TreeSet<>();
+        for (Map.Entry<String, String> entryForAirport : mapAllAirports.entrySet()) {
+            String nameAirport = entryForAirport.getKey();
+            if (nameAirport.compareToIgnoreCase(nameAirportForDepartureInPlace) == 0) {
+                for (Flight departureFlight : getListAllDepartureFlightsFromSelectedUserAirport(nameAirportForDepartureInPlace)) {
+                    if (departureFlight.getPlaceForArrival().compareToIgnoreCase(nameAirportForArrivalInPlace) == 0 &&
+                            departureFlight.getTimeDeparture().isAfter(LocalDateTime.now().plusHours(2))) {
+                        setDepartureFlights.add(departureFlight);
+                    }
+                }
+            }
+        }
 
+        for (Flight departureFlight : setDepartureFlights) {
+            return departureFlight;
+        }
+        return null;
+    }
 }

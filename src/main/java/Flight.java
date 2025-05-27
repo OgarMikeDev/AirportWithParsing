@@ -1,6 +1,6 @@
 import java.time.LocalDateTime;
 
-public class Flight {
+public class Flight implements Comparable<Flight> {
     private TypeFlight typeFlight;
     private String nameAirline;
     private String numberFlight;
@@ -59,7 +59,7 @@ public class Flight {
 
     @Override
     public String toString() {
-        return "Flight{" +
+        return "\uD83C\uDF89Flight{" +
                 "typeFlight=" + typeFlight +
                 ", nameAirline='" + nameAirline + '\'' +
                 ", numberFlight='" + numberFlight + '\'' +
@@ -68,7 +68,12 @@ public class Flight {
                 ", durationFlight='" + durationFlight + '\'' +
                 ", timeArrival=" + timeArrival +
                 ", daysForDeparture='" + daysForDeparture + '\'' +
-                '}';
+                "}\uD83C\uDF89\n";
+    }
+
+    @Override
+    public int compareTo(Flight o) {
+        return this.getTimeArrival().compareTo(o.getTimeArrival());
     }
 
     public enum TypeFlight {
