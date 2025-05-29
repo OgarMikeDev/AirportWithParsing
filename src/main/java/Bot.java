@@ -1,12 +1,17 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.File;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
+    Airport airport = null;
+
     //TODO Кнопка для вывода всех аэропортов
     private InlineKeyboardButton buttonForOutputAllAirports = InlineKeyboardButton.builder()
             .text("Список всех аэропортов")
@@ -35,11 +40,17 @@ public class Bot extends TelegramLongPollingBot {
             .keyboardRow(List.of(buttonForOutputFirstDepartureFlight))
             .build();
 
+    public Bot() {
+        airport = new Airport();
+    }
+
     @Override
     public void onUpdateReceived(Update update) {
         forWorkWithText(update);
+        forWorkWithButtons(update);
     }
 
+    //TODO метод для работы с текстом
     private void forWorkWithText(Update update) {
         if (update.hasMessage()) {
             String textMessage = update.getMessage().getText();
@@ -60,6 +71,35 @@ public class Bot extends TelegramLongPollingBot {
             }
         }
     }
+
+    //TODO метод для работы с кнопками
+    private void forWorkWithButtons(Update update) {
+        if (update.hasCallbackQuery()) {
+            String callbackData = update.getCallbackQuery().getData();
+
+            if (callbackData.equals(buttonForOutputAllAirports.getCallbackData())) {
+
+            }
+        }
+    }
+
+    //TODO методов для записи в текстовый файл
+    public void writeFileTxt(String choiceFromUser) {
+        try {
+            File file = new File();
+
+            if (choiceFromUser.equals(buttonForOutputAllAirports.getCallbackData())) {
+                file = (File) Files.write(Paths.get(airport.pathToFilesTxt + choiceFromUser), airport.getListAllAirports());
+            } else if (choiceFromUser.equals(buttonForOutputListDepartureFlight.getCallbackData())) {
+
+            } else if (choiceFromUser.equals(buttonForOutputListDepartureFlight.getCallbackData())) {
+
+            }
+        } catch (Exception ex) {
+            ex.getMessage();
+        }
+    }
+
 
     @Override
     public String getBotUsername() {
