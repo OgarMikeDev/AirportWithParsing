@@ -5,6 +5,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.io.FileWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -78,7 +79,7 @@ public class Bot extends TelegramLongPollingBot {
             String callbackData = update.getCallbackQuery().getData();
 
             if (callbackData.equals(buttonForOutputAllAirports.getCallbackData())) {
-
+                writeFileTxt(callbackData);
             }
         }
     }
@@ -86,6 +87,7 @@ public class Bot extends TelegramLongPollingBot {
     //TODO методов для записи в текстовый файл
     public void writeFileTxt(String choiceFromUser) {
         try {
+
         } catch (Exception ex) {
             ex.getMessage();
         }

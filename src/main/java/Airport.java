@@ -88,6 +88,7 @@ public class Airport {
         List<String> listAllAirports = new ArrayList<>();
         for (Map.Entry<String, String> entryAirport : mapAllAirports.entrySet()) {
             listAllAirports.add("\uD83C\uDF89" + entryAirport.getKey() + "\n" + entryAirport.getValue() + "\uD83C\uDF89");
+            //System.out.println("\uD83C\uDF89" + entryAirport.getKey() + "\n" + entryAirport.getValue() + "\uD83C\uDF89");
         }
         return listAllAirports;
     }
