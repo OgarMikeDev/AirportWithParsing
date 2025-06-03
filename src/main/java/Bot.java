@@ -86,15 +86,6 @@ public class Bot extends TelegramLongPollingBot {
     //TODO методов для записи в текстовый файл
     public void writeFileTxt(String choiceFromUser) {
         try {
-            File file = new File();
-
-            if (choiceFromUser.equals(buttonForOutputAllAirports.getCallbackData())) {
-                file = (File) Files.write(Paths.get(airport.pathToFilesTxt + choiceFromUser), airport.getListAllAirports());
-            } else if (choiceFromUser.equals(buttonForOutputListDepartureFlight.getCallbackData())) {
-
-            } else if (choiceFromUser.equals(buttonForOutputListDepartureFlight.getCallbackData())) {
-
-            }
         } catch (Exception ex) {
             ex.getMessage();
         }
