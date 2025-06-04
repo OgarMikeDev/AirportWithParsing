@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class Bot extends TelegramLongPollingBot {
             sendDocument.setChatId(chatId);
 
             if (callbackData.equals(buttonForOutputAllAirports.getCallbackData())) {
-                sendDocument.setDocument(new InputFile(writeFileTxtAndReturnPath(callbackData)));
+                sendDocument.setDocument(new InputFile(new File(writeFileTxtAndReturnPath(callbackData))));
             }
 
             try {
