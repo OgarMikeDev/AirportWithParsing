@@ -116,11 +116,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@airport_with_parsing_bot";
+        return "@study_tg_java_bot";
     }
 
     @Override
     public String getBotToken() {
-        return "7671162068:AAFmYmDYiTW8cdQ-gaWX4ofBkN7JfLALlA0";
+        return "7154507074:AAGgAs43pzip_1L_UldR_KWYAPp6jFWCKqQ";
     }
 }
