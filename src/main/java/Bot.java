@@ -1,13 +1,12 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.File;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.io.FileWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
@@ -77,20 +76,40 @@ public class Bot extends TelegramLongPollingBot {
     private void forWorkWithButtons(Update update) {
         if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            SendDocument sendDocument = new SendDocument();
+            sendDocument.setChatId(chatId);
 
             if (callbackData.equals(buttonForOutputAllAirports.getCallbackData())) {
-                writeFileTxt(callbackData);
+                sendDocument.setDocument(new InputFile(writeFileTxtAndReturnPath(callbackData)));
+            }
+
+            try {
+                execute(sendDocument);
+            } catch (Exception ex) {
+                ex.getMessage();
             }
         }
     }
 
     //TODO методов для записи в текстовый файл
-    public void writeFileTxt(String choiceFromUser) {
+    public String writeFileTxtAndReturnPath(String choiceFromUser) {
+        String path = airport.pathToFilesTxt + choiceFromUser + ".txt";
         try {
+            FileWriter fileWriter = new FileWriter(path);
+            String[] arrayAllAirports = airport.getListAllAirports().toString().split("\\,");
 
+            StringBuilder str = new StringBuilder();
+            for (String line : arrayAllAirports) {
+                str.append(line + "\n");
+            }
+
+            fileWriter.write(str.toString());
         } catch (Exception ex) {
             ex.getMessage();
         }
+        return path;
     }
 
 

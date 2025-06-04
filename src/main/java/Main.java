@@ -25,7 +25,7 @@ public class Main {
                 "чтобы получить список\n" +
                 "всех вылетов из него:");
         String nameAirportForDeparture = new Scanner(System.in).nextLine();
-        System.out.println(airport.getListAllDepartureFlightsFromSelectedUserAirport(nameAirportForDeparture));
+        airport.getListAllDepartureFlightsFromSelectedUserAirport(nameAirportForDeparture);
 
         /*
         TODO
