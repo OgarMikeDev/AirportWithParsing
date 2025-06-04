@@ -103,7 +103,7 @@ public class Bot extends TelegramLongPollingBot {
 
             StringBuilder str = new StringBuilder();
             for (String line : arrayAllAirports) {
-                str.append(line + "\n");
+                str.append(line.replaceAll("[\\]\\[]", "") + "\n");
             }
 
             fileWriter.write(str.toString());
@@ -116,11 +116,11 @@ public class Bot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "@study_tg_java_bot";
+        return "@airport_with_parsing_bot";
     }
 
     @Override
     public String getBotToken() {
-        return "7154507074:AAGgAs43pzip_1L_UldR_KWYAPp6jFWCKqQ";
+        return "7671162068:AAEpUpEGFeoB1MYk3fWk6Z3njLrXvCUtU8Y";
     }
 }
