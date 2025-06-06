@@ -1,6 +1,7 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendDocument;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class Bot extends TelegramLongPollingBot {
     Airport airport = null;
+    private boolean bolForListDeparture = false;
 
     //TODO Кнопка для вывода всех аэропортов
     private InlineKeyboardButton buttonForOutputAllAirports = InlineKeyboardButton.builder()
@@ -55,20 +57,23 @@ public class Bot extends TelegramLongPollingBot {
     private void forWorkWithText(Update update) {
         if (update.hasMessage()) {
             String textMessage = update.getMessage().getText();
+            Long userId = update.getMessage().getFrom().getId();
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(userId);
 
             if (textMessage.compareToIgnoreCase("/start") == 0) {
-                Long userId = update.getMessage().getFrom().getId();
-                SendMessage sendMessage = SendMessage.builder()
-                        .chatId(userId)
-                        .text("Выберете действие")
-                        .replyMarkup(keyboardWithMainCommands)
-                        .build();
+                        sendMessage.setText("Выберете действие");
+                        sendMessage.setReplyMarkup(keyboardWithMainCommands);
+            } else if (String.valueOf(airport.getListAllAirports()).contains(textMessage) &&
+                            bolForListDeparture) {
+                sendMessage.setText(String.valueOf(airport.getListAllDepartureFlightsFromSelectedUserAirport(textMessage)));
+                bolForListDeparture = false;
+            }
 
-                try {
-                    execute(sendMessage);
-                } catch (Exception ex) {
-                    ex.getMessage();
-                }
+            try {
+                execute(sendMessage);
+            } catch (Exception ex) {
+                ex.getMessage();
             }
         }
     }
@@ -77,20 +82,41 @@ public class Bot extends TelegramLongPollingBot {
     private void forWorkWithButtons(Update update) {
         if (update.hasCallbackQuery()) {
             String callbackData = update.getCallbackQuery().getData();
+            System.out.println("Callback \"" + callbackData + "\"");
             long chatId = update.getCallbackQuery().getMessage().getChatId();
+            int messageId = update.getCallbackQuery().getMessage().getMessageId();
 
             SendDocument sendDocument = new SendDocument();
             sendDocument.setChatId(chatId);
 
+            EditMessageText editMessageText = EditMessageText.builder()
+                    .chatId(chatId)
+                    .messageId(messageId)
+                    .text("")
+                    .build();
+
             if (callbackData.equals(buttonForOutputAllAirports.getCallbackData())) {
                 sendDocument.setDocument(new InputFile(new File(writeFileTxtAndReturnPath(callbackData))));
+
+                try {
+                    execute(sendDocument);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+            } else if (callbackData.equals(buttonForOutputListDepartureFlight.getCallbackData())) {
+                bolForListDeparture = true;
+                editMessageText.setText(
+                        "\nВведите название аэропорта,\n" +
+                                "чтобы получить список\n" +
+                                "всех вылетов из него:");
+
+                try {
+                    execute(editMessageText);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
             }
 
-            try {
-                execute(sendDocument);
-            } catch (Exception ex) {
-                ex.getMessage();
-            }
         }
     }
 
