@@ -14,6 +14,7 @@ import java.util.List;
 public class Bot extends TelegramLongPollingBot {
     Airport airport = null;
     private boolean bolForListDeparture = false;
+    private boolean bolForListArrival = false;
 
     //TODO Кнопка для вывода всех аэропортов
     private InlineKeyboardButton buttonForOutputAllAirports = InlineKeyboardButton.builder()
@@ -68,6 +69,10 @@ public class Bot extends TelegramLongPollingBot {
                             bolForListDeparture) {
                 sendMessage.setText(String.valueOf(airport.getListAllDepartureFlightsFromSelectedUserAirport(textMessage)));
                 bolForListDeparture = false;
+            } else if (String.valueOf(airport.getListAllAirports()).contains(textMessage) &&
+                            bolForListArrival) {
+                sendMessage.setText(String.valueOf(airport.getListAllArrivalFlightsFromSelectedUserAirport(textMessage)));
+                bolForListArrival = false;
             }
 
             try {
@@ -109,6 +114,18 @@ public class Bot extends TelegramLongPollingBot {
                         "\nВведите название аэропорта,\n" +
                                 "чтобы получить список\n" +
                                 "всех вылетов из него:");
+
+                try {
+                    execute(editMessageText);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+            } else if (callbackData.equals(buttonForOutputListArrivalFlight.getCallbackData())) {
+                bolForListArrival = true;
+                editMessageText.setText(
+                        "\nВведите название аэропорта,\n" +
+                                "чтобы получить список\n" +
+                                "всех прилётов на него:");
 
                 try {
                     execute(editMessageText);
