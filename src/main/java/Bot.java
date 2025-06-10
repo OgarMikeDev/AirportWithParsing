@@ -15,6 +15,9 @@ public class Bot extends TelegramLongPollingBot {
     Airport airport = null;
     private boolean bolForListDeparture = false;
     private boolean bolForListArrival = false;
+    private boolean bolForFirstDepartureFlight = false;
+    private boolean bolForFirstArrivalFlight = false;
+    private String nameAirportForDeparture = "";
 
     //TODO Кнопка для вывода всех аэропортов
     private InlineKeyboardButton buttonForOutputAllAirports = InlineKeyboardButton.builder()
@@ -73,6 +76,20 @@ public class Bot extends TelegramLongPollingBot {
                             bolForListArrival) {
                 sendMessage.setText(String.valueOf(airport.getListAllArrivalFlightsFromSelectedUserAirport(textMessage)));
                 bolForListArrival = false;
+            } else if (String.valueOf(airport.getListAllAirports()).contains(textMessage) &&
+                            bolForFirstDepartureFlight) {
+                bolForFirstDepartureFlight = false;
+                bolForFirstArrivalFlight = true;
+                nameAirportForDeparture = textMessage;
+                sendMessage.setText("Введите название аэропорта,\n" +
+                        "в кот-й планируете прилететь:");
+            } else if (String.valueOf(airport.getListAllAirports()).contains(textMessage) &&
+                    bolForFirstArrivalFlight) {
+                bolForFirstArrivalFlight = false;
+                sendMessage.setText(
+                        String.valueOf(airport.getFirstArrivalFlight(nameAirportForDeparture, textMessage
+                        ))
+                );
             }
 
             try {
@@ -126,6 +143,17 @@ public class Bot extends TelegramLongPollingBot {
                         "\nВведите название аэропорта,\n" +
                                 "чтобы получить список\n" +
                                 "всех прилётов на него:");
+
+                try {
+                    execute(editMessageText);
+                } catch (Exception ex) {
+                    ex.getMessage();
+                }
+            } else if (callbackData.equals(buttonForOutputFirstDepartureFlight.getCallbackData())) {
+                bolForFirstDepartureFlight = true;
+                editMessageText.setText(
+                        "\nВведите название аэропорта,\n" +
+                                ",с кот-го планируете вылететь:");
 
                 try {
                     execute(editMessageText);

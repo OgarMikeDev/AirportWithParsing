@@ -380,4 +380,8 @@ public class Airport {
         }
         return null;
     }
+
+    public Map<String, String> getMapAllAirports() {
+        return mapAllAirports;
+    }
 }
